@@ -55,3 +55,14 @@ Su responsabilidad dentro del sistema es realizar lecturas y permitir verificar 
 | --- | --- | --- | --- |
 | Tanque | Representar y controlar el estado de un tanque de almacenamiento, garantizando que su nivel se mantenga dentro de los límites válidos | Identificador del tanque, capacidad máxima, nivel actual, estado de operación | Debe permitir llenarse, vaciarse, detener su operación, conocer su nivel actual, conocer su porcentaje de llenado y conocer su estado actual |
 | SensorNivel | Obtener y reportar una lectura del nivel de un tanque asociado | Identificador del sensor, la última lectura obtenida | Debe permitir realizar una lectura del tanque asociado, proporcionar el valor medido, e indicar si esa lectura se encuentra dentro de un intervalo válido |
+
+## 4. Relaciones entre los objetos
+Los objetos Tanque y SensorNivel necesitan colaborar entre sí para que el sistema funcione de forma coherente. El sensor requiere conocer al tanque que tiene asociado, ya que su función es justamente obtener una lectura del nivel de ese tanque específico. 
+Por lo tanto, SensorNivel necesita tener acceso al objeto Tanque correspondiente para poder consultar su nivel actual en el momento en que se realiza una lectura.
+
+Esta relación es necesaria porque, en un proceso real de automatización, un sensor siempre está físicamente vinculado a un tanque en particular; 
+no tendría sentido que un sensor reportara lecturas sin estar asociado a un tanque específico.
+
+Es importante evitar que ambas clases dupliquen responsabilidades. 
+Por ejemplo, SensorNivel no debería mantener su propio valor del nivel del tanque de forma independiente, ya que esto podría generar inconsistencias si el nivel del tanque cambia (por llenado o vaciado) y el sensor no refleja ese cambio. En cambio, 
+el sensor debe apoyarse directamente en la información que le proporciona el tanque al momento de leer, de manera que Tanque siga siendo el único responsable de conservar y validar su propio nivel, y Sensor Nivel sea responsable únicamente de obtener y reportar esa lectura.
