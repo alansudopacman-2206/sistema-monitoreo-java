@@ -1,11 +1,11 @@
 # Equipo
 ## Integrantes
-/ Nombre / Usuario GitHUb / Rol /
-/ --- / --- / --- /
-/Alan Lopez Cruz/alansudopacman-2206/Estudiante A/
-/Ian Y Rodriguez Ojeda/i1521488/Estudiante B/
+| Nombre | Usuario GitHUb | Rol |
+| --- | --- | --- |
+|Alan Lopez Cruz|alansudopacman-2206|Estudiante A|
+|Ian Y Rodriguez Ojeda|i1521488|Estudiante B|
 
-##Fecha de inicio de practica
+## Fecha de inicio de practica
 03/Septiembre/2026
 
 ## 1. Descripción del problema
@@ -66,3 +66,42 @@ no tendría sentido que un sensor reportara lecturas sin estar asociado a un tan
 Es importante evitar que ambas clases dupliquen responsabilidades. 
 Por ejemplo, SensorNivel no debería mantener su propio valor del nivel del tanque de forma independiente, ya que esto podría generar inconsistencias si el nivel del tanque cambia (por llenado o vaciado) y el sensor no refleja ese cambio. En cambio, 
 el sensor debe apoyarse directamente en la información que le proporciona el tanque al momento de leer, de manera que Tanque siga siendo el único responsable de conservar y validar su propio nivel, y Sensor Nivel sea responsable únicamente de obtener y reportar esa lectura.
+
+## 5. Diseño de clases
+| Clase | Atributos propuestos | Tipo de dato                               | Metodos propuestos                                                                                                                          | Responsabilidad |
+| --- | --- |--------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------| --- |
+| Tanque | id , capacidadMaxima , nivelActual , status | string , double , double , StatusTank enum | llenar (double Cantidad) , vaciar() double Cantidad() , detener() , getNivelActual() , getPorcentajeLLenado() , getStatus() , getGralInfo() | Representar el estado físico de un tanque de almacenamiento y controlar su contenido, garantizando que su nivel se mantenga siempre entre 0 y su capacidad máxima.|
+| Sensor Nivel | id , lastLecture , tanqueAsociado | string , double , Tanque  | realizarLecture() , eslaLecturecorrecta() , getLastLecture() , getTanqueAsociado() | Obtener y reportar la lectura actual del nivel del tanque que tiene físicamente asociado, comprobando si la lectura es válida sin alterar ni duplicar el estado interno del tanque.|
+
+## 6. Diagrama UML inicial
+
+![Diagrama UML inicial](uml-inicial.png)
+
+## Justificación de diseño.
+
+1.- Se propusieron las clases Tanque y SensorNivel, junto con la enumeración EstadoTanque, para reflejar los componentes clave del sistema de automatización industrial:
++ Tanque: Abstrae la entidad física donde se almacena el contenido, gestionando sus límites y operaciones fundamentales.
++ SensorNivel: Representa el dispositivo encargado de medir y reportar el estado del tanque de forma independiente.
++ EstadoTanque: Permite acotar los estados de operación (DETENIDO, LLENANDOSE, VACIANDOSE) usando un tipo de dato seguro (enum) para evitar cadenas de texto inconsistentes.
+
+2.- ¿Cuál es la responsabilidad inicial de cada clase?
++ Tanque: Garantizar la integridad del estado interno del tanque de almacenamiento, ejecutando las operaciones de llenado, vaciado y detención mientras mantiene el nivel estrictamente entre 0 y su capacidad máxima.
++ SensorNivel: Consultar y reportar la lectura en tiempo real del tanque asociado y verificar la validez de dicha medición sin modificar el estado del tanque.
++ EstadoTanque: Definir y delimitar el conjunto cerrado de estados operativos válidos que puede asumir un tanque.
+
+3.- ¿Por qué determinados atributos fueron definidos como privados?
++ Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) se definieron como private para aplicar el principio de encapsulamiento. Esto impide que código externo modifique directamente variables críticas (por ejemplo, asignando un nivelActual negativo o excediendo la capacidad de forma arbitraria), garantizando que cualquier cambio pase obligatoriamente por la lógica de validación de la clase.
+
+4.- ¿Qué información decidieron proporcionar mediante los constructores?
++ Tanque(id, capacidadMaxima, nivelInicial): Se requiere el identificador, el límite de capacidad y la cantidad inicial almacenada para dejar al objeto listo y en un estado físicamente válido desde su creación.
++ SensorNivel(id, tanqueAsociado): Se requiere el identificador del sensor y la referencia directa al objeto Tanque que va a monitorear. Esto asegura que ningún sensor exista desvinculado de su correspondiente tanque.
+
+5.- ¿Qué objetos se relacionan entre sí y por qué?
++ Existe una asociación unidireccional de SensorNivel hacia Tanque. El sensor posee una referencia al tanque para invocar sus métodos de consulta (getNivelActual()). Esta relación modela el proceso industrial real donde un sensor físico depende de la presencia de un recipiente para tomar lecturas.
+
+6.- ¿Qué decisiones tomaron para evitar duplicar responsabilidades?
++ Se decidió que SensorNivel no mantenga una variable propia e independiente con el volumen del tanque. En su lugar, el sensor consulta directamente al objeto Tanque cada vez que ejecuta realizarLectura(). De esta manera, el Tanque se mantiene como la única fuente de verdad sobre su nivel, evitando inconsistencias cuando el nivel cambia por llenado o vaciado.
+
+7.- ¿Qué parte del diseño fue discutida entre ambos integrantes y qué decisión tomaron?
++ Se discutió si la validación de límites (impedir que el nivel sea menor a 0 o mayor a la capacidad máxima) debía hacerse dentro del SensorNivel o dentro del Tanque.
++ Decisión tomada: Acordamos que el Tanque debe ser el único responsable de restringir sus propios límites físicos durante las operaciones de llenado y vaciado, ya que es quien posee el control del estado. El SensorNivel se limita únicamente a consultar y verificar si el valor leído está en el rango esperado, respetando la separación de responsabilidades.
