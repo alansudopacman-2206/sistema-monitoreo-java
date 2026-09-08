@@ -49,3 +49,9 @@ Separar esta responsabilidad del tanque nos permite mantener el diseño más ord
 ya que si en el futuro se agregan otros tipos de sensores o validaciones de lectura, esos cambios no deberían afectar directamente la lógica interna del tanque. 
 Su responsabilidad dentro del sistema es realizar lecturas y permitir verificar si esas lecturas están dentro de un rango considerado válido.
 
+## 3. Estado y comportamiento
+
+| Objeto propuesto | Responsabilidad | Información que debe conservar | Comportamientos que debe realizar |
+| --- | --- | --- | --- |
+| Tanque | Representar y controlar el estado de un tanque de almacenamiento, garantizando que su nivel se mantenga dentro de los límites válidos | Identificador del tanque, capacidad máxima, nivel actual, estado de operación | Debe permitir llenarse, vaciarse, detener su operación, conocer su nivel actual, conocer su porcentaje de llenado y conocer su estado actual |
+| SensorNivel | Obtener y reportar una lectura del nivel de un tanque asociado | Identificador del sensor, la última lectura obtenida | Debe permitir realizar una lectura del tanque asociado, proporcionar el valor medido, e indicar si esa lectura se encuentra dentro de un intervalo válido |
