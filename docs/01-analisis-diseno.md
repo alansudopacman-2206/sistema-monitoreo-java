@@ -9,33 +9,23 @@
 03/Septiembre/2026
 
 ## 1. Descripción del problema
+Es un sistema para monitorear tanques de almacenamiento, cada tanque
+tiene un id para su identificación, capacidad maxinam, nivel actual de
+contenido y un estado (LLENANDO, DETENIDO, VACIANDO). Además cada tanque tiene un sensor asociado que se
+encargara de medir su nivel.
 
-Lo que queremos representar es una pequeña instalación industrial que tiene varios tanques de almacenamiento, cada uno con su propio sensor para saber cuánto contenido tiene en un momento dado. La idea es simular, desde consola, el funcionamiento básico de esos tanques dentro de un proceso automatizado.
-
-Por cada tanque necesitamos manejar:
-
-- Un identificador para poder distinguirlo de los demás.
-- La capacidad máxima que puede almacenar.
-- El nivel actual que tiene en ese momento.
-- El estado en el que se encuentra (detenido, llenando o vaciando).
-
-Además de eso, el sistema también debe contemplar un sensor de nivel que se encarga de leer el contenido del tanque, tal como pasaría en un proceso real de automatización.
-
-El programa tiene que poder hacer lo siguiente: mostrar la información general de un tanque, empezar a llenarlo, empezar a vaciarlo, detenerlo, decir cuál es su nivel actual, calcular y mostrar su porcentaje de llenado, decir en qué estado está, y obtener una lectura a través del sensor que tiene asociado.
-
-Por último, hay una restricción que es clave para que la simulación tenga sentido: el nivel de un tanque no puede bajar de cero ni pasarse de su capacidad máxima. O sea que si alguien intenta llenarlo de más o vaciarlo de menos, el programa tiene que evitarlo y mantener siempre un valor válido.
 
 ## 2. Identificación de objetos
 
-Viendo el problema, nos dimos cuenta de que hay dos cosas que claramente pueden ser objetos:
-
 **Tanque**
-
-Es el tanque de almacenamiento como tal. Nos parece que tiene que ser un objeto porque cada uno tiene su propia identidad (se distinguen por su id), tiene un estado que va cambiando (el nivel y si está llenando, vaciando o detenido), y tiene comportamientos propios como llenarse o vaciarse. Su trabajo dentro del sistema es representar bien lo que pasaría con un tanque real y asegurarse de que su nivel nunca se salga de los límites permitidos.
+El es un objeto porque tiene su propia identidad (id), un 
+estado que cambia con el tiempo (nivel, llenado, vaciando o detenido).
+Su responsabilidad es representar el tanque "real" y asegurarse de que el nivel nunca
+salga de los limites establecidos.
 
 **SensorNivel**
-
-Es el sensor que mide el nivel del tanque. Decidimos que fuera un objeto aparte porque hace algo distinto al tanque: no guarda contenido ni cambia de estado, solo se encarga de leer y reportar el nivel. Nos pareció buena idea separarlo porque si más adelante se necesitan otros tipos de sensores o validaciones distintas, eso no debería afectar la lógica interna del tanque. Su función dentro del sistema es hacer lecturas y decir si esas lecturas están dentro de un rango que consideremos válido.
+El sensor se encargara de medir el nivel de tanque, su unica
+responsabilidad es hacer lecturas y decir si está en un rango valido.
 
 ## 3. Estado y comportamiento
 
