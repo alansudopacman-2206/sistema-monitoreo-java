@@ -10,33 +10,19 @@
 
 ## 1. Descripción del problema
 
-Lo que queremos representar es una pequeña instalación industrial que tiene varios tanques de almacenamiento, cada uno con su propio sensor para saber cuánto contenido tiene en un momento dado. La idea es simular, desde consola, el funcionamiento básico de esos tanques dentro de un proceso automatizado.
+Es un sistema para monitorear tanques de almacenamiento. Cada uno tendrá
+una identificación (id) para identificarlo, una capacidad máxima, un nivel actual de contenido y tendrá un
+estado (LLENANDO, Vaciando, Detenido), además cada tanque tendrá un sensor que se encargará de medir el nivel.
 
-Por cada tanque necesitamos manejar:
-
-- Un identificador para poder distinguirlo de los demás.
-- La capacidad máxima que puede almacenar.
-- El nivel actual que tiene en ese momento.
-- El estado en el que se encuentra (detenido, llenando o vaciando).
-
-Además de eso, el sistema también debe contemplar un sensor de nivel que se encarga de leer el contenido del tanque, tal como pasaría en un proceso real de automatización.
-
-El programa tiene que poder hacer lo siguiente: mostrar la información general de un tanque, empezar a llenarlo, empezar a vaciarlo, detenerlo, decir cuál es su nivel actual, calcular y mostrar su porcentaje de llenado, decir en qué estado está, y obtener una lectura a través del sensor que tiene asociado.
-
-Por último, hay una restricción que es clave para que la simulación tenga sentido: el nivel de un tanque no puede bajar de cero ni pasarse de su capacidad máxima. O sea que si alguien intenta llenarlo de más o vaciarlo de menos, el programa tiene que evitarlo y mantener siempre un valor válido.
-
+El sistema tendrá que poder llenar, vaciar y detenerlo y mostrar la información (nivel, porcentaje de llenado y estado), además el nivel del tanque nunca puede ser menor a 0 o mayor a su capacidad maxima.
 ## 2. Identificación de objetos
-
-Viendo el problema, nos dimos cuenta de que hay dos cosas que claramente pueden ser objetos:
-
 **Tanque**
-
-Es el tanque de almacenamiento como tal. Nos parece que tiene que ser un objeto porque cada uno tiene su propia identidad (se distinguen por su id), tiene un estado que va cambiando (el nivel y si está llenando, vaciando o detenido), y tiene comportamientos propios como llenarse o vaciarse. Su trabajo dentro del sistema es representar bien lo que pasaría con un tanque real y asegurarse de que su nivel nunca se salga de los límites permitidos.
-
+Es el tanque de almacenamiento. Se penso como un objeto porque incluira una identidad (id), un estado que 
+cambia cone el tiempo (nivel, llenado, vaciado o detenido) y comportamientos. Su responsabilidad es representar el tanque real y 
+asegurarse de que su nivel nunca salga de sus límites permitidos.
 **SensorNivel**
-
-Es el sensor que mide el nivel del tanque. Decidimos que fuera un objeto aparte porque hace algo distinto al tanque: no guarda contenido ni cambia de estado, solo se encarga de leer y reportar el nivel. Nos pareció buena idea separarlo porque si más adelante se necesitan otros tipos de sensores o validaciones distintas, eso no debería afectar la lógica interna del tanque. Su función dentro del sistema es hacer lecturas y decir si esas lecturas están dentro de un rango que consideremos válido.
-
+Es el senor que mide el nivel del tanque. Este mide y guarda la información sobre cuál es el nivel actual, este debe estar asociado
+aún tanque para obtener la información antes mencionada.
 ## 3. Estado y comportamiento
 
 | Objeto propuesto | Responsabilidad | Información que debe conservar | Comportamientos que debe realizar |
@@ -50,7 +36,7 @@ Tanque y SensorNivel tienen que colaborar entre sí para que todo funcione. El s
 
 Esto tiene sentido porque, en la vida real, un sensor siempre está conectado a un tanque en particular; no tendría caso que un sensor diera lecturas sin estar asociado a ninguno.
 
-También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por ejemplo, el SensorNivel no debería guardar su propio valor del nivel de forma independiente, porque si el tanque cambia de nivel (al llenarse o vaciarse) y el sensor no se entera, se desincronizarían. Por eso el sensor siempre consulta directamente al tanque al momento de leer, de modo que Tanque sigue siendo el único que controla y valida su propio nivel, y SensorNivel solo se encarga de obtener y reportar esa lectura.
+También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por ejemplo, el SensorNivel no debería guardar su propio valor del nivel de forma independiente, porque si el tanque cambia de nivel (al llenarse o vaciarse) y el sensor no se entera, sé dé sincronizarían. Por eso el sensor siempre consulta directamente al tanque al momento de leer, de modo que Tanque sigue siendo el único que controla y valida su propio nivel, y SensorNivel solo se encarga de obtener y reportar esa lectura.
 
 ## 5. Diseño de clases
 
@@ -70,7 +56,7 @@ También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por
 Elegimos Tanque y SensorNivel, más la enumeración EstadoTanque, porque son las piezas principales del problema:
 - Tanque representa el recipiente físico y controla sus límites y operaciones.
 - SensorNivel representa el dispositivo que mide y reporta el estado del tanque, de forma independiente.
-- EstadoTanque nos sirve para limitar los estados posibles (DETENIDO, LLENANDOSE, VACIANDOSE) usando un enum en vez de manejar texto libre, que podría dar lugar a errores o inconsistencias.
+- EstadoTanque nos sirve para limitar los estados posibles (DETENIDO, LLENÁNDOSE, VACIÁNDOSE) usando un enum en vez de manejar texto libre, que podría dar lugar a errores o inconsistencias.
 
 **2. ¿Cuál es la responsabilidad principal de cada clase?**
 
@@ -80,7 +66,7 @@ Elegimos Tanque y SensorNivel, más la enumeración EstadoTanque, porque son las
 
 **3. ¿Por qué determinados atributos fueron definidos como privados?**
 
-Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) los pusimos como private para aplicar encapsulamiento. Así evitamos que desde fuera se pueda modificar directamente algo crítico, como poner un nivelActual negativo o mayor a la capacidad, obligando a que cualquier cambio pase por los métodos de la clase que sí validan esos límites.
+Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) los pusimos como prívate para aplicar encapsulamiento. Así evitamos que desde fuera se pueda modificar directamente algo crítico, como poner un nivelActual negativo o mayor a la capacidad, obligando a que cualquier cambio pase por los métodos de la clase que sí validan esos límites.
 
 **4. ¿Qué información decidieron proporcionar mediante los constructores?**
 
@@ -93,7 +79,7 @@ Hay una relación de un solo sentido: SensorNivel apunta hacia Tanque. El sensor
 
 **6. ¿Qué decisiones tomaron para evitar duplicar responsabilidades?**
 
-Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En vez de eso, cada vez que se llama a realizarLectura(), el sensor va y consulta directamente al Tanque. Así el Tanque sigue siendo la única fuente confiable de su nivel, y no hay riesgo de que se desactualice la información del sensor cuando el tanque cambia.
+Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En vez de eso, cada vez que se llama a realizarLectura(), el sensor va y consulta directamente al Tanque. Así el Tanque sigue siendo la única fuente confiable de su nivel, y no hay riesgo de que se des actualice la información del sensor cuando el tanque cambia.
 
 **7. ¿Qué parte del diseño fue discutida entre ambos integrantes y qué decisión tomaron?**
 
