@@ -80,8 +80,7 @@ el sensor debe apoyarse directamente en la información que le proporciona el ta
 ## Justificación de diseño.
 
 1.- Se propusieron las clases Tanque y SensorNivel, junto con la enumeración EstadoTanque, para reflejar los componentes clave del sistema de automatización industrial:
-+ Tanque: Abstrae la entidad física donde se almacen
-+ a el contenido, gestionando sus límites y operaciones fundamentales.
++ Tanque: Abstrae la entidad física donde se almacena el contenido, gestionando sus límites y operaciones fundamentales.
 + SensorNivel: Representa el dispositivo encargado de medir y reportar el estado del tanque de forma independiente.
 + EstadoTanque: Permite acotar los estados de operación (DETENIDO, LLENANDOSE, VACIANDOSE) usando un tipo de dato seguro (enum) para evitar cadenas de texto inconsistentes.
 
@@ -94,7 +93,7 @@ el sensor debe apoyarse directamente en la información que le proporciona el ta
 + Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) se definieron como private para aplicar el principio de encapsulamiento. Esto impide que código externo modifique directamente variables críticas (por ejemplo, asignando un nivelActual negativo o excediendo la capacidad de forma arbitraria), garantizando que cualquier cambio pase obligatoriamente por la lógica de validación de la clase.
 
 4.- ¿Qué información decidieron proporcionar mediante los constructores?
-+ Tanque(id, capacidadMaxima, nivelinicial): Se requiere el identificador, el límite de capacidad y la cantidad inicial almacenada para dejar al objeto listo y en un estado físicamente válido desde su creación.
++ Tanque(id, capacidadMaxima, nivelInicial): Se requiere el identificador, el límite de capacidad y la cantidad inicial almacenada para dejar al objeto listo y en un estado físicamente válido desde su creación.
 + SensorNivel(id, tanqueAsociado): Se requiere el identificador del sensor y la referencia directa al objeto Tanque que va a monitorear. Esto asegura que ningún sensor exista desvinculado de su correspondiente tanque.
 
 5.- ¿Qué objetos se relacionan entre sí y por qué?
