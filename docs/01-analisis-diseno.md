@@ -61,7 +61,7 @@ También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por
 
 ## 6. Diagrama UML inicial
 
-![Diagrama UML inicial](uml-inicial.png)
+![Diagrama UML inicial](https://github.com/alansudopacman-2206/sistema-monitoreo-java/blob/master/images/uml-inicial.png)
 
 ## 7. Justificación del diseño
 
@@ -99,4 +99,4 @@ Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En v
 
 Platicamos si la validación de límites (que el nivel no baje de 0 ni pase la capacidad máxima) debía estar en el SensorNivel o en el Tanque. Al final decidimos que esa responsabilidad fuera únicamente del Tanque, porque es quien controla su propio estado; el SensorNivel solo se limita a consultar y decir si la lectura obtenida está dentro de lo esperado, sin meterse en la validación de límites.
 
-![Imagen_Tanque]()
+
