@@ -89,5 +89,3 @@ Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En v
 **7. ¿Qué parte del diseño fue discutida entre ambos integrantes y qué decisión tomaron?**
 
 Platicamos si la validación de límites (que el nivel no baje de 0 ni pase la capacidad máxima) debía estar en el SensorNivel o en el Tanque. Al final decidimos que esa responsabilidad fuera únicamente del Tanque, porque es quien controla su propio estado; el SensorNivel solo se limita a consultar y decir si la lectura obtenida está dentro de lo esperado, sin meterse en la validación de límites.
-
-
