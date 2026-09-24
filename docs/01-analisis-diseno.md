@@ -15,6 +15,7 @@ contenido y un estado (LLENANDO, DETENIDO, VACIANDO). Además cada tanque tiene 
 encargara de medir su nivel.
 
 
+El sistema tendrá que poder llenar, vaciar y detenerlo y mostrar la información (nivel, porcentaje de llenado y estado), además el nivel del tanque nunca puede ser menor a 0 o mayor a su capacidad maxima.
 ## 2. Identificación de objetos
 
 **Tanque**
@@ -40,7 +41,7 @@ Tanque y SensorNivel tienen que colaborar entre sí para que todo funcione. El s
 
 Esto tiene sentido porque, en la vida real, un sensor siempre está conectado a un tanque en particular; no tendría caso que un sensor diera lecturas sin estar asociado a ninguno.
 
-También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por ejemplo, el SensorNivel no debería guardar su propio valor del nivel de forma independiente, porque si el tanque cambia de nivel (al llenarse o vaciarse) y el sensor no se entera, se desincronizarían. Por eso el sensor siempre consulta directamente al tanque al momento de leer, de modo que Tanque sigue siendo el único que controla y valida su propio nivel, y SensorNivel solo se encarga de obtener y reportar esa lectura.
+También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por ejemplo, el SensorNivel no debería guardar su propio valor del nivel de forma independiente, porque si el tanque cambia de nivel (al llenarse o vaciarse) y el sensor no se entera, sé dé sincronizarían. Por eso el sensor siempre consulta directamente al tanque al momento de leer, de modo que Tanque sigue siendo el único que controla y valida su propio nivel, y SensorNivel solo se encarga de obtener y reportar esa lectura.
 
 ## 5. Diseño de clases
 
@@ -51,7 +52,7 @@ También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por
 
 ## 6. Diagrama UML inicial
 
-![Diagrama UML inicial](uml-inicial.png)
+![Diagrama UML inicial](https://github.com/alansudopacman-2206/sistema-monitoreo-java/blob/master/images/uml-inicial.png)
 
 ## 7. Justificación del diseño
 
@@ -60,7 +61,7 @@ También cuidamos que ninguna de las dos clases repitiera responsabilidades. Por
 Elegimos Tanque y SensorNivel, más la enumeración EstadoTanque, porque son las piezas principales del problema:
 - Tanque representa el recipiente físico y controla sus límites y operaciones.
 - SensorNivel representa el dispositivo que mide y reporta el estado del tanque, de forma independiente.
-- EstadoTanque nos sirve para limitar los estados posibles (DETENIDO, LLENANDOSE, VACIANDOSE) usando un enum en vez de manejar texto libre, que podría dar lugar a errores o inconsistencias.
+- EstadoTanque nos sirve para limitar los estados posibles (DETENIDO, LLENÁNDOSE, VACIÁNDOSE) usando un enum en vez de manejar texto libre, que podría dar lugar a errores o inconsistencias.
 
 **2. ¿Cuál es la responsabilidad principal de cada clase?**
 
@@ -70,7 +71,7 @@ Elegimos Tanque y SensorNivel, más la enumeración EstadoTanque, porque son las
 
 **3. ¿Por qué determinados atributos fueron definidos como privados?**
 
-Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) los pusimos como private para aplicar encapsulamiento. Así evitamos que desde fuera se pueda modificar directamente algo crítico, como poner un nivelActual negativo o mayor a la capacidad, obligando a que cualquier cambio pase por los métodos de la clase que sí validan esos límites.
+Todos los atributos (id, capacidadMaxima, nivelActual, estado, ultimaLectura, tanqueAsociado) los pusimos como prívate para aplicar encapsulamiento. Así evitamos que desde fuera se pueda modificar directamente algo crítico, como poner un nivelActual negativo o mayor a la capacidad, obligando a que cualquier cambio pase por los métodos de la clase que sí validan esos límites.
 
 **4. ¿Qué información decidieron proporcionar mediante los constructores?**
 
@@ -83,8 +84,10 @@ Hay una relación de un solo sentido: SensorNivel apunta hacia Tanque. El sensor
 
 **6. ¿Qué decisiones tomaron para evitar duplicar responsabilidades?**
 
-Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En vez de eso, cada vez que se llama a realizarLectura(), el sensor va y consulta directamente al Tanque. Así el Tanque sigue siendo la única fuente confiable de su nivel, y no hay riesgo de que se desactualice la información del sensor cuando el tanque cambia.
+Decidimos que SensorNivel no guardara su propia copia del nivel del tanque. En vez de eso, cada vez que se llama a realizarLectura(), el sensor va y consulta directamente al Tanque. Así el Tanque sigue siendo la única fuente confiable de su nivel, y no hay riesgo de que se des actualice la información del sensor cuando el tanque cambia.
 
 **7. ¿Qué parte del diseño fue discutida entre ambos integrantes y qué decisión tomaron?**
 
 Platicamos si la validación de límites (que el nivel no baje de 0 ni pase la capacidad máxima) debía estar en el SensorNivel o en el Tanque. Al final decidimos que esa responsabilidad fuera únicamente del Tanque, porque es quien controla su propio estado; el SensorNivel solo se limita a consultar y decir si la lectura obtenida está dentro de lo esperado, sin meterse en la validación de límites.
+
+
