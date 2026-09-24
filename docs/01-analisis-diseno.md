@@ -9,25 +9,20 @@
 03/Septiembre/2026
 
 ## 1. Descripción del problema
-Es un sistema para monitorear tanques de almacenamiento, cada tanque
-tiene un id para su identificación, capacidad maxinam, nivel actual de
-contenido y un estado (LLENANDO, DETENIDO, VACIANDO). Además cada tanque tiene un sensor asociado que se
-encargara de medir su nivel.
 
+Es un sistema para monitorear tanques de almacenamiento. Cada uno tendrá
+una identificación (id) para identificarlo, una capacidad máxima, un nivel actual de contenido y tendrá un
+estado (LLENANDO, Vaciando, Detenido), además cada tanque tendrá un sensor que se encargará de medir el nivel.
 
 El sistema tendrá que poder llenar, vaciar y detenerlo y mostrar la información (nivel, porcentaje de llenado y estado), además el nivel del tanque nunca puede ser menor a 0 o mayor a su capacidad maxima.
 ## 2. Identificación de objetos
-
 **Tanque**
-El es un objeto porque tiene su propia identidad (id), un 
-estado que cambia con el tiempo (nivel, llenado, vaciando o detenido).
-Su responsabilidad es representar el tanque "real" y asegurarse de que el nivel nunca
-salga de los limites establecidos.
-
+Es el tanque de almacenamiento. Se penso como un objeto porque incluira una identidad (id), un estado que 
+cambia cone el tiempo (nivel, llenado, vaciado o detenido) y comportamientos. Su responsabilidad es representar el tanque real y 
+asegurarse de que su nivel nunca salga de sus límites permitidos.
 **SensorNivel**
-El sensor se encargara de medir el nivel de tanque, su unica
-responsabilidad es hacer lecturas y decir si está en un rango valido.
-
+Es el senor que mide el nivel del tanque. Este mide y guarda la información sobre cuál es el nivel actual, este debe estar asociado
+aún tanque para obtener la información antes mencionada.
 ## 3. Estado y comportamiento
 
 | Objeto propuesto | Responsabilidad | Información que debe conservar | Comportamientos que debe realizar |
