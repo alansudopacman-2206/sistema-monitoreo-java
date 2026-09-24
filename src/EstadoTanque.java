@@ -1,4 +1,4 @@
 public enum EstadoTanque
 {
-        DETENIDO, LLENANDO, VACIANDO
+        DETENIDO, LLENANDOSE, VACIANDOSE
 }
