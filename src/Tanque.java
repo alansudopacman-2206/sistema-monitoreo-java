@@ -46,4 +46,35 @@ public class Tanque
 
         this.status = EstadoTanque.VACIANDOSE;
     }
+    public void detener() {
+        this.status = EstadoTanque.DETENIDO;
+    }
+
+    public String getID() {
+        return this.id;
+    }
+
+    public double getCapacidadMaxima() {
+        return this.capacidadMaxima;
+    }
+
+    public double getNivelActual() {
+        return this.nivelActual;
+    }
+
+    public EstadoTanque getStatus() {
+        return this.status;
+    }
+
+    public double getPorcentajeLLenado() {
+        return (this.nivelActual / this.capacidadMaxima) * 100;
+    }
+
+    public String getGralInfo() {
+        return "TANQUE " + this.id + "\n" +
+                "Capacidad: " + this.capacidadMaxima + " L\n" +
+                "Nivel actual: " + this.nivelActual + " L\n" +
+                "Porcentaje: " + this.getPorcentajeLLenado() + " %\n" +
+                "Estado: " + this.status;
+    }
 }
