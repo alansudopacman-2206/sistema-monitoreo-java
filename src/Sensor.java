@@ -38,9 +38,3 @@ public class Sensor {
         return this.tanqueAsociado;
     }
 }
-// el enum no funcionó
-/*
-public enum EstadoTanque
-{
-    VACIANDOSE, LLENANDOSE, DETENIDO
-}*/
